@@ -11,6 +11,16 @@ const ul = document.createElement('ul');
 form.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    //create Object for local storage
+    let obj = {
+        name: nameInput.value,
+        email: emailInput.value,
+        phone: phoneInput.value
+    };
+    
+    //create localStorage and convert the obj into string
+    localStorage.setItem( obj.email , JSON.stringify(obj));
+
     //create li for the ul
     const li = document.createElement('li');
     //create edit btn
@@ -19,7 +29,7 @@ form.addEventListener('submit', (e) => {
     const deleteBtn = document.createElement('button');
 
     //create text node to li
-    li.appendChild(document.createTextNode(`${nameInput.value} - ${emailInput.value} - ${phoneInput.value}`));
+    li.appendChild(document.createTextNode(obj.name + '-' + obj.email + '-' + obj.phone));
     //create tect node to edit btn
     editBtn.appendChild(document.createTextNode('Edit'));
     //create text node to delete button
@@ -33,58 +43,42 @@ form.addEventListener('submit', (e) => {
     ul.appendChild(li);
     
     //insert it into html
-    form.insertAdjacentElement('afterend', ul);
-
-    //create Object for local storage
-    let userDetails = {
-        name: nameInput.value,
-        email: emailInput.value,
-        phone: phoneInput.value
-    };
-
-    //convert it into Json format
-    let userDetailsJson = JSON.stringify(userDetails);
-
-    //create localStorage
-    localStorage.setItem( emailInput.value , userDetailsJson);
-
-    //storing the Inputs value
-    let nameText = nameInput.value;
-    let emailText = emailInput.value;
-    let phoneText = phoneInput.value;
+    form.insertAdjacentElement('afterend', ul);  
     
     //edit button event
     editBtn.addEventListener('click', (e) => {
-
+        
         //displaying the input values
-        nameInput.value = nameText;
-        emailInput.value = emailText;
-        phoneInput.value = phoneText;
+        document.getElementById('name').value = obj.name;
+        document.getElementById('email').value = obj.email;
+        document.getElementById('phone').value = obj.phone;
+
         //delete the li from ul
         ul.removeChild(li);
+        
         //delete data from local storage
-        localStorage.removeItem(emailText);    
+        localStorage.removeItem(obj.email); 
     });
 
     //delete button event
     deleteBtn.addEventListener('click', (e) => {
+
         //delete the li from ul
         ul.removeChild(li);
 
         //delete data from local storage
-        localStorage.removeItem(emailText);
+        localStorage.removeItem(obj.email);
+
         //clear fields
-        nameInput.value = '';
-        emailInput.value = '';
-        phoneInput.value = '';
-        
+        obj.name = '';
+        obj.email = '';
+        obj.phone = '';     
     });
 
     //clear fields
     nameInput.value = '';
     emailInput.value = '';
-    phoneInput.value = '';
-   
+    phoneInput.value = ''; 
 });
 
 
